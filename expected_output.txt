@@ -1,0 +1,49 @@
+Split sizes -> train: 720, validation: 240, test (held aside): 240
+
+Decision tree overfitting demonstration
+Depth    1: train 0.760 val 0.758
+Depth    3: train 0.786 val 0.762
+Depth    5: train 0.839 val 0.704
+Depth   10: train 0.936 val 0.671
+Depth None: train 1.000 val 0.662
+
+LogisticRegression 5-fold CV accuracy: 0.757 +/- 0.018
+
+Data leakage demonstration
+Scaling before split: scaler mean for income = 64011.13
+Correct train-only scaling: scaler mean for income = 64085.35
+Shapes -> leaked full matrix (1200, 6), correct train (960, 6), correct test (240, 6)
+Leakage explanation (4 lines)
+1. Scaling before splitting calculates statistics using both training and test rows.
+2. This lets information from the held-out test data influence preprocessing.
+3. Correct practice is to fit the scaler on training data only and transform validation/test data.
+4. A Pipeline applies this rule within each cross-validation fold and prevents leakage.
+
+Problem classification
+Spam detection: Supervised (labelled spam/ham examples)
+Customer segmentation: Unsupervised (discover groups without target labels)
+House price prediction: Supervised (known sale prices)
+Anomaly detection: Usually unsupervised (identify unusual patterns without labels)
+
+ML workflow (7 steps)
+1. Define the business problem and target.
+2. Collect and inspect the data.
+3. Clean data and handle missing values/outliers.
+4. Explore data and engineer useful features.
+5. Split into train, validation and test sets.
+6. Train models and tune using validation/cross-validation.
+7. Evaluate once on the test set, communicate results and monitor.
+
+Plot saved: overfitting_train_validation.png
+
+STDERR / WARNINGS:
+Spreadsheet runtime warmup failed during python startup
+Traceback (most recent call last):
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/patches/warm_spreadsheet_runtime_on_startup.py", line 26, in warm_spreadsheet_runtime_on_startup
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/spreadsheet_warmup.py", line 785, in warm_spreadsheet_runtime
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/spreadsheet_warmup.py", line 718, in _warm_feature_flows
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/spreadsheet_warmup.py", line 509, in _warm_drawing_and_image_flows
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/generated/interface/models.py", line 32861, in bring_to_front
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/rpc/remote.py", line 764, in __call__
+  File "/tmp/tmp.QlpUkOUI9D/artifact_tool_v2-2.8.66/artifact_tool/rpc/client.py", line 175, in call
+artifact_tool.rpc.client.RemoteError: Element ordering requires an owning element collection.
